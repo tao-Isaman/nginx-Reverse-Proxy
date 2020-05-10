@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  nginx:
+    image: nginx:latest
+    restart: unless-stopped
+    depends_on:
+      - "service-1"
+      - "service-2"
+      - "service-3"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+      - "443:443"
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  service-1:
+    build: ./service-1
+    container_name: service-1
+  service-2:
+    build: ./service-2
+    container_name: service-2
+  service-3:
+    build: ./service-3
+    container_name: service-3
+
